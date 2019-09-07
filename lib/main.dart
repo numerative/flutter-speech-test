@@ -51,63 +51,42 @@ class _VoiceHomeState extends State<VoiceHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.green[900],
       body: Container(
         child: Container(
             child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Row(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                FloatingActionButton(
-                  child: Icon(Icons.cancel),
-                  mini: true,
-                  backgroundColor: Colors.deepOrange,
-                  onPressed: () {
-                    _speechRecognition.cancel().then((result) => setState(() {
-                          _isListening = result;
-                          _isAvailable = true;
-                          resultText = "";
-                        }));
-                  },
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    FloatingActionButton(
+                      child: Icon(Icons.mic),
+                      backgroundColor: Colors.red,
+                      onPressed: () {
+                        if (_isAvailable && !_isListening)
+                          _speechRecognition
+                              .listen(locale: "hu_HU")
+                              .then((result) => print('$result'));
+                      },
+                    ),
+                  ],
                 ),
-                FloatingActionButton(
-                  child: Icon(Icons.mic),
-                  backgroundColor: Colors.pink,
-                  onPressed: () {
-                    if (_isAvailable && !_isListening)
-                      _speechRecognition
-                          .listen(locale: "hu_HU")
-                          .then((result) => print('$result'));
-                  },
-                ),
-                FloatingActionButton(
-                  child: Icon(Icons.stop),
-                  mini: true,
-                  backgroundColor: Colors.deepPurple,
-                  onPressed: () {
-                    _speechRecognition.stop().then(
-                          (result) => setState(() => _isListening = result),
-                        );
-                  },
-                ),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  decoration: BoxDecoration(
+                    color: Colors.cyanAccent[100],
+                    borderRadius: BorderRadius.circular(6.0),
+                  ),
+                  padding: EdgeInsets.symmetric(
+                    vertical: 8.0,
+                    horizontal: 12.0,
+                  ),
+                  child: Text(resultText),
+                )
               ],
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width * 0.6,
-              decoration: BoxDecoration(
-                color: Colors.cyanAccent[100],
-                borderRadius: BorderRadius.circular(6.0),
-              ),
-              padding: EdgeInsets.symmetric(
-                vertical: 8.0,
-                horizontal: 12.0,
-              ),
-              child: Text(resultText),
-            )
-          ],
-        )),
+            )),
       ),
     );
   }
